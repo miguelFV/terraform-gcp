@@ -1,2 +1,5 @@
 *.json
 .terraform
+*.apply
+terraform.tfstate
+terraform.tfstate.backup

@@ -10,18 +10,30 @@ resource "google_storage_bucket" "first_bucket" {
   force_destroy = true
 }
 
-
+//Source code para ejecucion de funcion
 resource "google_storage_bucket_object" "sc_load_table_a" {
-  name   = "source-code-function-upload-tables"
+  name   = "sourceCode.zip"
   bucket = google_storage_bucket.first_bucket.name
   source = "./source-code/sourceCode.zip"
 }
 
 //creacion de cloud function con trigger de carga en bucket 
+resource "google_cloudfunctions_function" "load_function_data" {
+  name        = "function-test-load"
+  description = "Function for load data into BigQuery after load file csv"
+  runtime     = "java11"
 
+  available_memory_mb   = 128
+  source_archive_bucket = google_storage_bucket.first_bucket.name
+  source_archive_object = google_storage_bucket_object.sc_load_table_a.name
+  event_trigger  {
+    event_type  = "google.storage.object.finalize"
+    resource     = google_storage_bucket.first_bucket.name
+  }
+  entry_point           = "functions.LoadData"
+}
 
-
-
+//creation schema for bigQuery the tables
 resource "google_bigquery_dataset" "gcp_data_model_a" {
   dataset_id                  = "gcp_schema_bigquery"
   friendly_name               = "Dataset para carga de archivos"
@@ -29,9 +41,16 @@ resource "google_bigquery_dataset" "gcp_data_model_a" {
   location                    = "US"
 }
 
-
+//table for upload data with the function
 resource "google_bigquery_table" "gcp_tabla_a" {
   dataset_id = google_bigquery_dataset.gcp_data_model_a.dataset_id
   table_id   = "gcp_table_a"
 }
 
+
+//Data CSV for trigger the function
+resource "google_storage_bucket_object" "load-info-csv" {
+  name   = "data-csv-table-a"
+  bucket = google_storage_bucket.first_bucket.name
+  source = "./init-resources/testLoad.csv"
+}
