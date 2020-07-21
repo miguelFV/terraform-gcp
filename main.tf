@@ -14,7 +14,7 @@ resource "google_storage_bucket" "first_bucket" {
 resource "google_storage_bucket_object" "sc_load_table_a" {
   name   = "source-code-function-upload-tables"
   bucket = google_storage_bucket.first_bucket.name
-  source = "./source-code/index.zip"
+  source = "./source-code/sourceCode.zip"
 }
 
 //creacion de cloud function con trigger de carga en bucket 
