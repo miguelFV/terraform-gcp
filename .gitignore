@@ -1,3 +1,2 @@
- .apply
- .json
- .terraform/
+*.json
+.terraform/
