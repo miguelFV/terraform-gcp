@@ -1,0 +1,1 @@
+gcp_table_a,file_table_a_YYMMDD.txt

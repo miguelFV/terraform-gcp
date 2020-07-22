@@ -41,16 +41,31 @@ resource "google_bigquery_dataset" "gcp_data_model_a" {
   location                    = "US"
 }
 
-//table for upload data with the function
-resource "google_bigquery_table" "gcp_tabla_a" {
+//table for configure doc-table upload
+resource "google_bigquery_table" "gcp_data_file_table" {
+  dataset_id = google_bigquery_dataset.gcp_data_model_a.dataset_id
+  table_id   = "rel_file_table"
+   schema = <<EOF
+[
+  {
+    "name": "table_name",
+    "type": "STRING",
+    "mode": "NULLABLE",
+    "description": "The name fo the table"
+  },
+  {
+    "name": "file_to_upload",
+    "type": "STRING",
+    "mode": "NULLABLE",
+    "description": "The name of the file for upload"
+  }
+]
+EOF
+}
+
+//table for configure doc-table upload
+resource "google_bigquery_table" "gcp_data_file_table_a" {
   dataset_id = google_bigquery_dataset.gcp_data_model_a.dataset_id
   table_id   = "gcp_table_a"
 }
 
-
-//Data CSV for trigger the function
-resource "google_storage_bucket_object" "load-info-csv" {
-  name   = "data-csv-table-a"
-  bucket = google_storage_bucket.first_bucket.name
-  source = "./init-resources/testLoad.csv"
-}
