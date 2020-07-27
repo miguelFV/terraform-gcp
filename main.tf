@@ -33,7 +33,7 @@ resource "google_cloudfunctions_function" "load_function_data" {
   entry_point           = "functions.LoadData"
 }
 
-//creation schema for bigQuery the tables
+//creation dataset for bigQuery
 resource "google_bigquery_dataset" "gcp_data_model_a" {
   dataset_id                  = "gcp_schema_bigquery"
   friendly_name               = "Dataset para carga de archivos"
@@ -51,7 +51,7 @@ resource "google_bigquery_table" "gcp_data_file_table" {
     "name": "table_name",
     "type": "STRING",
     "mode": "NULLABLE",
-    "description": "The name fo the table"
+    "description": "The name of the table"
   },
   {
     "name": "file_to_upload",
@@ -63,7 +63,7 @@ resource "google_bigquery_table" "gcp_data_file_table" {
 EOF
 }
 
-//table for configure doc-table upload
+//table for test upload data
 resource "google_bigquery_table" "gcp_data_file_table_a" {
   dataset_id = google_bigquery_dataset.gcp_data_model_a.dataset_id
   table_id   = "gcp_table_a"
