@@ -152,7 +152,7 @@ resource "google_compute_autoscaler" "gcp_auto_scaler_airflow" {
   target = google_compute_instance_group_manager.gcp_group_manager_airflow.id
 
   autoscaling_policy {
-    max_replicas    = 5
+    max_replicas    = 2
     min_replicas    = 1
     cooldown_period = 60
 
